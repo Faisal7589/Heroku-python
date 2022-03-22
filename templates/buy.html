@@ -1,0 +1,11 @@
+{% extends "quote.html" %}
+
+{% block main %}
+    <form action="/buy" method="post">
+
+        <input class="form-control" name="symbol" type="text" placeholder="Type stock symbol" autocomplete="off" autofocus>
+        <input class="form-control" name="shares" type="number" placeholder="Number of shares" autocomplete="off">
+
+        <button class="btn btn-primary" type="submit">Search</button>
+    </form>
+{% endblock %}

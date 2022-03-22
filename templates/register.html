@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block main %}
+    <script>
+
+        var check = function() {
+  if (document.getElementById('password').value ==
+    document.getElementById('confirm_password').value) {
+    document.getElementById('message').style.color = 'green';
+    document.getElementById('message').innerHTML = 'matching';
+  } else {
+    document.getElementById('message').style.color = 'red';
+    document.getElementById('message').innerHTML = 'not matching';
+  }
+}
+    </script>
+
+    <form action="/register" method="post">
+        <div class="form-group"> <input class="form-control" autofocus autocomplete="off" name="username" type="text" placeholder="Username" required> </div>
+        <div class="form-group"> <input  class="form-control" name="Password" type="password" id="password" placeholder="password" onkeyup='check();' /> </div>
+        <div class="form-group"> <input  class="form-control" name="matchpassword" type="password" id="confirm_password" placeholder="Re-enter password" onkeyup='check();'/> </div>
+        <span id='message'> Enter matching password</span>
+        <br>
+
+        <button class="btn btn-primary" type="submit">Register</button>
+
+        <br>
+        <footer>
+        <div class="container signin">
+            <p>Already have an account? <a href="/">Log in</a>.</p>
+        </div>
+        </footer>
+    </form>
+{% endblock %}

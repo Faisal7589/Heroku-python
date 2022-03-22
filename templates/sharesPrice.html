@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block main %}
+<form action="/buy" method="post">
+<body>
+    <table>
+      <thead>
+    <tr>
+      <th scope="col">name</th>
+      <th scope="col">price</th>
+      <th scope="col">symbol</th>
+      <th scope="col">No. of shares</th>
+      <th scope="col">total</th>
+
+    </tr>
+      </thead>
+
+      <tr>
+
+        <td>{{symbol.name}}</td>
+        <td>{{symbol.price}}</td>
+        <td>{{symbol.symbol}}</td>
+        <td>{{shares}}</td>
+        <td>{{price2}}</td>
+
+      </tr>
+
+      <tr>
+
+        <th scope="row">cash at hand</th>
+        <td>{{cash}}</td>
+      </tr>
+  </table>
+  <br>
+
+        <button class="btn btn-primary" type="submit">return to home</button>
+    </form>
+</body>
+
+
+
+{% endblock %}

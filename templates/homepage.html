@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block main %}
+
+    <table>
+        <thead>
+           <tr>
+               <th>symbols owned</th>
+               <th>number of shares</th>
+               <th>price of one share</th>
+               <th>Date Bought</th>
+               <th>total price</th>
+           </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {% for stock in stocks %}
+                <tr>
+                    <td>{{stock["symbol"]}}</td>
+                    <td>{{ stock["shares"] }}</td>
+                    <td> {{ stock["price"] }}</td>
+                    <td> {{ stock["time"] }}</td>
+                    <td> {{ usd(stock["total"]) }} </td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <th> Cash </th>
+                    <td colspan="3"></td>
+                    <td>{{ usd(cash) }}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>TOTAL</th>
+                    <td colspan="3"></td>
+                    <td>{{usd(totals)}}</td>
+            </tr>
+        </tfoot>
+    </table>
+
+{% endblock %}
