@@ -1,13 +1,11 @@
 import os
-
+import psycopg2
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
-
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
-
 from helpers import apology, login_required, lookup, usd
 from datetime import datetime
 now = datetime.now()
@@ -40,9 +38,13 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Configure CS50 Library to use SQLite database
+db = SQL(os.environ.get("DATABASE_URL")
+or "sqlite:///finance.db")
 
-db = SQL("sqlite:///finance.db")
-SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
+# Make sure API key is set
+
+if not os.environ.get("API_KEY"):
+    raise RuntimeError("API_KEY not set")
 
 
 @app.route("/")
@@ -51,10 +53,12 @@ def index():
     stocks = db.execute("SELECT symbol, total, SUM(shares) as shares,price, time FROM transactions WHERE user_id = ? GROUP BY symbol", session["user_id"])
     cash = db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
 
+    totals = 0
+
     totals = cash
 
     for stock in stocks:
-        totals += stock['total'] + stock['shares']
+        totals += stock['total']
 
     return render_template("homepage.html", stocks=stocks, cash=cash, usd=usd, totals=totals)
 
@@ -64,6 +68,7 @@ def index():
 def buy():
     if request.method == "POST":
         shares = int(request.form.get("shares"))
+        print(shares)
         symbol = request.form.get("symbol")
         #print(lookup(symbol['name']))
 
@@ -78,8 +83,7 @@ def buy():
 
         price = [lookup(symbol)['price']]
         print(price)
-        price1 = float(price[0])
-        print(price1)
+
         price2 = float(price[0]) * shares
         print(price2)
 
@@ -91,7 +95,10 @@ def buy():
         if cash < price2:
             return apology("broke ass nigga, not enough cash")
 
+
         db.execute("INSERT INTO transactions (symbol, shares, total, price, time, user_id) VALUES(?,?,?,?,?,?);", symbol, shares, price2, price, now, session["user_id"])
+
+        price2 = 0
 
         return redirect("/")
     else:
@@ -239,3 +246,8 @@ def errorhandler(e):
 # Listen for errors
 for code in default_exceptions:
     app.errorhandler(code)(errorhandler)
+
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)
