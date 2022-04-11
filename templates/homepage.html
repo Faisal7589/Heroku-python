@@ -16,11 +16,14 @@
             <tr>
                 {% for stock in stocks %}
                 <tr>
-                    <td>{{stock["symbol"]}}</td>
+
+
+                    <td>{{ stock["symbol"] }}</td>
                     <td>{{ stock["shares"] }}</td>
                     <td> {{ stock["price"] }}</td>
                     <td> {{ stock["time"] }}</td>
-                    <td> {{ usd(stock["total"]) }} </td>
+                    <td> {{ usd(stock["total"] * stock["shares"]) }} </td>
+
                 </tr>
                 {% endfor %}
                 <tr>
@@ -31,9 +34,11 @@
         </tbody>
         <tfoot>
             <tr>
-                <th>TOTAL</th>
+                <th></th>
+
                     <td colspan="3"></td>
-                    <td>{{usd(totals)}}</td>
+                    <td></td>
+
             </tr>
         </tfoot>
     </table>
